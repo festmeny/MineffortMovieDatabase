@@ -1,0 +1,48 @@
+﻿<Page
+    x:Class="Mineffort_Movie_DB.Views.MovieListPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Mineffort_Movie_DB.ViewModels"
+    xmlns:conv="using:Mineffort_Movie_DB.Converters"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:MovieListPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <Page.Resources>
+        <conv:PosterConverter x:Name="PosterConverter" />
+        <conv:DateYearConverter x:Name="DateYearConverter" />
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <RelativePanel Grid.Row="0" Padding="60,10" Background="LightGray" VerticalAlignment="Center">
+            <TextBox x:Name="SearchBox" Width="300" Text="{Binding QueryText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" KeyDown="{x:Bind ViewModel.SearchMovieKeyboardDown}"/>
+            <Button Content="Search" Click="{x:Bind ViewModel.SearchMovieButtonClick}" RelativePanel.RightOf="SearchBox" RelativePanel.AlignVerticalCenterWith="SearchBox" />
+            <Button x:Name="HomeButton" RelativePanel.AlignRightWithPanel="True" Content="Home" RelativePanel.AlignVerticalCenterWith="SearchBox" Margin="0,0,10,0" Click="HomeButton_Click" />
+        </RelativePanel>
+
+            <ListView x:Name="MovieListView" VerticalAlignment="Top" ItemsSource="{Binding Movies}" IsItemClickEnabled="True" 
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.VerticalScrollMode="Auto"
+                  Grid.Row="1" Padding="30,0" ItemClick="{x:Bind ViewModel.OpenMovie}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <RelativePanel Padding="0,10" Height="120">
+                        <Image x:Name="Img" Source="{Binding poster_path, Converter={StaticResource PosterConverter}}" Width="60" Height="100"/>
+                        <TextBlock x:Name="Title" FontWeight="Bold" RelativePanel.RightOf="Img" RelativePanel.AlignTopWith="Img" Margin="10,0,0,0" Text="{Binding title}" />
+                        <TextBlock x:Name="Year" RelativePanel.RightOf="Title" RelativePanel.AlignTopWith="Title" Margin="10,0,0,0" Text="{Binding release_date, Converter={StaticResource DateYearConverter}}" />
+                        <TextBlock TextTrimming="CharacterEllipsis" TextWrapping="Wrap" x:Name="Description" RelativePanel.RightOf="Img" RelativePanel.Below="Title" Margin="10,0,0,0" Text="{Binding overview}" />
+                    </RelativePanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>
