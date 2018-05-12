@@ -1,4 +1,4 @@
-# MineffortMovieDatabase
+# Mineffort Movie Database
 
 This is a UWP program created for a collage project. The application uses https://www.themoviedb.org webapi for accessing movies and actors.
 
